@@ -1,14 +1,13 @@
+import { colors } from '@/shared/constants/colors';
+import { borderRadius, spacing } from '@/shared/constants/spacing';
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
-  TouchableOpacity,
   StyleProp,
+  TextInput,
   TextStyle,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { colors } from '@/shared/constants/colors';
-import { spacing } from '@/shared/constants/spacing';
-import { borderRadius } from '@/shared/constants/spacing';
 import SharedText from './SharedText';
 
 interface SharedInputProps {
@@ -26,6 +25,9 @@ interface SharedInputProps {
   editable?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
+  secureTextEntry?: boolean;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'url'
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
 }
 
 export default function SharedInput({

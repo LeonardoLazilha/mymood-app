@@ -1,20 +1,22 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
-import {
-  SharedScreen,
-  SharedText,
-  SharedButton,
-  SharedCard,
-  SharedBadge,
-  SharedAvatar,
-  SharedInput,
-  SharedDivider,
-} from '@/shared/ui';
 import { colors } from '@/shared/constants/colors';
 import { spacing } from '@/shared/constants/spacing';
-import { typography } from '@/shared/constants/typography';
+import {
+  SharedAvatar,
+  SharedBadge,
+  SharedButton,
+  SharedCard,
+  SharedDivider,
+  SharedInput,
+  SharedScreen,
+  SharedText,
+} from '@/shared/ui';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { View } from 'react-native';
 
 export default function StyleguideScreen() {
+  const router = useRouter()
+
   if (!__DEV__) return null;
 
   const sectionStyle = {
@@ -24,6 +26,13 @@ export default function StyleguideScreen() {
 
   return (
       <SharedScreen>
+        <SharedButton
+          label="← Voltar"
+          variant="ghost"
+          size="sm"
+          onPress={() => router.back()}
+          style={{ alignSelf: 'flex-start', marginBottom: spacing.sm }}
+        />
         <View style={{ padding: spacing.lg, gap: spacing.lg }}>
           {/* Header */}
           <View>
