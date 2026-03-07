@@ -1,38 +1,13 @@
-import { Platform } from 'react-native';
-
 export const typography = {
-  fonts: Platform.select({
-    ios: {
-      sans: 'system-ui',
-      serif: 'ui-serif',
-      rounded: 'ui-rounded',
-      mono: 'ui-monospace',
-    },
-    default: {
-      sans: 'normal',
-      serif: 'serif',
-      rounded: 'normal',
-      mono: 'monospace',
-    },
-    web: {
-      sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-      serif: "Georgia, 'Times New Roman', serif",
-      rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-      mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-    },
-  }),
-  sizes: {
-    xs: 12,
-    sm: 14,
-    base: 16,
-    lg: 18,
-    xl: 20,
-    '2xl': 24,
-    '3xl': 30,
-  },
-  lineHeights: {
-    tight: 1.2,
-    normal: 1.5,
-    relaxed: 1.75,
-  },
+  h1: { fontSize: 32, fontWeight: '700' as const, lineHeight: 40 },
+  h2: { fontSize: 24, fontWeight: '700' as const, lineHeight: 32 },
+  h3: { fontSize: 20, fontWeight: '600' as const, lineHeight: 28 },
+  h4: { fontSize: 18, fontWeight: '600' as const, lineHeight: 26 },
+  body: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
+  bodyMedium: { fontSize: 16, fontWeight: '500' as const, lineHeight: 24 },
+  bodySemibold: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24 },
+  label: { fontSize: 14, fontWeight: '500' as const, lineHeight: 20 },
+  caption: { fontSize: 12, fontWeight: '400' as const, lineHeight: 16 },
+  captionMedium: { fontSize: 12, fontWeight: '500' as const, lineHeight: 16 },
+  xs: { fontSize: 12, fontWeight: '400' as const, lineHeight: 16 },
 };
