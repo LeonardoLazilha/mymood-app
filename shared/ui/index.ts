@@ -1,2 +1,8 @@
-// Re-export all components from this barrel file
-// Components should be named SharedComponent.tsx and placed in ./components/
+export { default as SharedButton } from './components/SharedButton';
+export { default as SharedCard } from './components/SharedCard';
+export { default as SharedInput } from './components/SharedInput';
+export { default as SharedBadge } from './components/SharedBadge';
+export { default as SharedText } from './components/SharedText';
+export { default as SharedAvatar } from './components/SharedAvatar';
+export { default as SharedScreen } from './components/SharedScreen';
+export { default as SharedDivider } from './components/SharedDivider';
