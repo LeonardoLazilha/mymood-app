@@ -6,3 +6,4 @@ export { default as SharedText } from './components/SharedText';
 export { default as SharedAvatar } from './components/SharedAvatar';
 export { default as SharedScreen } from './components/SharedScreen';
 export { default as SharedDivider } from './components/SharedDivider';
+export { default as SharedTabBar } from './components/SharedTabBar';

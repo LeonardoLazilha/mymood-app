@@ -8,14 +8,17 @@ import {
   SharedDivider,
   SharedInput,
   SharedScreen,
+  SharedTabBar,
   SharedText,
 } from '@/shared/ui';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function StyleguideScreen() {
   const router = useRouter()
+  const [activeTab, setActiveTab] = useState('home')
 
   if (!__DEV__) return null;
 
@@ -535,6 +538,54 @@ export default function StyleguideScreen() {
               <SharedDivider label="Or" />
 
               <SharedDivider label="Continue with" />
+            </View>
+          </View>
+
+          <SharedDivider />
+
+          {/* TabBar Section */}
+          <View style={sectionStyle}>
+            <SharedText variant="h2" color="textPrimary">
+              Tab Bar
+            </SharedText>
+
+            <View style={{ gap: spacing.lg }}>
+              <SharedText variant="h4" color="textPrimary">
+                MyMood Navigation
+              </SharedText>
+              <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, overflow: 'hidden' }}>
+                <SharedTabBar
+                  tabs={[
+                    {
+                      key: 'home',
+                      label: 'Home',
+                      icon: <Ionicons name="home" size={24} color={colors.textSecondary} />,
+                    },
+                    {
+                      key: 'history',
+                      label: 'History',
+                      icon: <Ionicons name="time" size={24} color={colors.textSecondary} />,
+                    },
+                    {
+                      key: 'log',
+                      label: 'Log',
+                      icon: <Ionicons name="add-circle" size={24} color={colors.textSecondary} />,
+                    },
+                    {
+                      key: 'insights',
+                      label: 'Insights',
+                      icon: <Ionicons name="sparkles" size={24} color={colors.textSecondary} />,
+                    },
+                    {
+                      key: 'profile',
+                      label: 'Profile',
+                      icon: <Ionicons name="person" size={24} color={colors.textSecondary} />,
+                    },
+                  ]}
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                />
+              </View>
             </View>
           </View>
 
