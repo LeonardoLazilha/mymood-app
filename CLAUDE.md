@@ -1,62 +1,117 @@
-# CLAUDE.md
+# MyMood — Claude Code Context
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Project Overview
+MyMood is a mood and symptom tracker app with AI-generated insights.
+Target audience: Adults 25–45. Vibe: clean, minimalist, purple/lilac.
 
-# MyMood
-
-Mood and symptom tracker app with AI insights.
-
-## Stack
-- React Native + Expo
-- NativeWind (TailwindCSS)
+## Tech Stack
+- React Native + Expo (Expo Router for navigation)
 - TypeScript
-- Supabase (auth + database + edge functions)
-- Drizzle ORM
-- OpenAI API
+- NativeWind (TailwindCSS for React Native)
+- Supabase (Auth + PostgreSQL + Edge Functions)
+- Drizzle ORM (type-safe queries)
+- OpenAI API (insights via Supabase Edge Functions)
 
-## Folder Structure
-- **app/** → Screens using Expo Router (file-based routing)
-- **shared/ui/components/** → Shared UI components (always named SharedComponent.tsx)
-- **shared/ui/index.ts** → Barrel file for component exports
-- **shared/constants/** → Design tokens (colors, typography, spacing)
-- **db/** → Drizzle ORM schema
-- **lib/** → Utility clients (Supabase)
-
-## Development Commands
-
-```bash
-# Start development server
-npm start
-
-# Start with specific platforms
-npx expo start --android
-npx expo start --ios
-npx expo start --web
-
-# Linting
-npm run lint
+## Project Structure
+```
+app/
+  _layout.tsx          ← root layout, handles auth guard
+  (auth)/              ← unauthenticated routes
+    login.tsx
+    register.tsx
+  (app)/               ← protected routes (requires login)
+    _layout.tsx
+    index.tsx          ← Home dashboard
+app/
+shared/
+  ui/
+    components/        ← all Shared* components
+    index.ts           ← barrel file
+  constants/
+    colors.ts
+    typography.ts
+    spacing.ts
+    shadows.ts
+db/
+  schema.ts            ← Drizzle schema (source of truth)
+  migrations/          ← auto-generated, do not edit
+lib/
+  supabase.ts          ← Supabase client
 ```
 
-## Key Rules
+## Design System — ALWAYS use Shared* components
 
-1. **Component Naming:** All reusable components must be named `Shared*.tsx` and placed in `shared/ui/components/`
-2. **Exports:** Always export components from `shared/ui/index.ts`
-3. **Colors:** Never hardcode colors — always import from `shared/constants/colors.ts`
-4. **No Inline Components:** Never create inline components inside screen files; extract to `shared/ui/components/`
-5. **Screen Wrapper:** Use `SharedScreen` as the wrapper component for all screens
-6. **Styling:** Use NativeWind `className` for all styling (no inline StyleSheet)
+| Visual Element     | Component         |
+|--------------------|-------------------|
+| Screen wrapper     | SharedScreen      |
+| H1 / H2 / H3       | SharedText variant="h1/h2/h3" |
+| Body / caption     | SharedText variant="body/caption" |
+| Buttons            | SharedButton      |
+| Cards / containers | SharedCard        |
+| Tags / chips       | SharedBadge       |
+| Text inputs        | SharedInput       |
+| User avatar        | SharedAvatar      |
+| Separators         | SharedDivider     |
 
-## Environment Variables
-
-Create `.env.local` (not committed) with:
+Import from barrel file:
+```ts
+import { SharedButton, SharedCard, SharedText } from '@/shared/ui'
 ```
-EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-OPENAI_API_KEY=your_openai_key
+
+## Colors — NEVER hardcode colors
+```ts
+import { colors } from '@/shared/constants/colors'
+// colors.primary, colors.textSecondary, colors.error, etc.
 ```
 
-## TypeScript
+## Spacing — NEVER hardcode spacing values
+```ts
+import { spacing } from '@/shared/constants/spacing'
+// spacing.xs, spacing.sm, spacing.md, spacing.lg, spacing.xl, spacing.xxl
+```
 
-- Strict mode enabled in `tsconfig.json`
-- Path alias: `@/*` maps to root directory
-- React Compiler enabled for auto-memoization
+## Database Schema
+```ts
+// logs — daily mood entries
+logs: { id, userId, mood (1–10), note, symptoms (text[]), createdAt }
+
+// insights — AI-generated insights
+insights: { id, userId, content, generatedAt }
+```
+
+## Auth Rules
+- Auth is handled entirely in `app/_layout.tsx`
+- NEVER redirect manually after login/logout — the root layout handles it automatically
+- `supabase.auth.signInWithPassword()` → layout detects session and redirects
+- `supabase.auth.signOut()` → layout detects null session and redirects to login
+
+## Navigation
+- Use `expo-router` for all navigation
+- Groups `(auth)` and `(app)` are route groups — they don't appear in the URL
+- Use `router.push()` for forward navigation
+- Use `router.back()` to go back
+- Use `router.replace()` to navigate without adding to history
+
+## Code Rules
+- TypeScript strict mode — no `any` unless absolutely necessary
+- No inline styles — use `spacing` and `colors` constants
+- No hardcoded strings for colors or spacing
+- All components must handle loading and empty states
+- Screen files go in `app/(app)/` for protected screens
+- Shared components go in `shared/ui/components/`
+- NEVER create inline components inside screen files
+
+## Skills
+The `/skills` directory contains Claude Code skill files with step-by-step workflows:
+
+- **`new-screen.md`** — Workflow for adding new screens
+  - Decide route group (`auth` vs `app`)
+  - Map UI layout to Shared* components
+  - Create screen in correct location
+  - Register navigation if needed
+
+- **`new-component.md`** — Workflow for creating new Shared* components
+  - Check for duplicates before creating
+  - Create component in `shared/ui/components/`
+  - Export from `shared/ui/index.ts`
+  - Add to styleguide.tsx

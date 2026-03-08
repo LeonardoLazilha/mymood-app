@@ -42,7 +42,6 @@ export default function LoginScreen() {
   return (
     <SharedScreen>
       <View style={{ flex: 1, paddingHorizontal: spacing.lg, justifyContent: 'center' }}>
-        {/* Logo/Title */}
         <View style={{ marginBottom: spacing.xxl, alignItems: 'center' }}>
           <SharedText variant="h1" color="primary" weight="700">
             MyMood
@@ -52,7 +51,6 @@ export default function LoginScreen() {
           </SharedText>
         </View>
 
-        {/* Email Input */}
         <View style={{ marginBottom: spacing.md }}>
           <SharedInput
             label="Email"
@@ -65,10 +63,9 @@ export default function LoginScreen() {
           />
         </View>
 
-        {/* Password Input */}
         <View style={{ marginBottom: spacing.md }}>
           <SharedInput
-            label="Senha"
+            label="Password"
             placeholder="Enter your password"
             value={password}
             onChangeText={setPassword}
@@ -77,7 +74,6 @@ export default function LoginScreen() {
           />
         </View>
 
-        {/* Error Message */}
         {error && (
           <View style={{ marginBottom: spacing.md }}>
             <SharedText variant="caption" color="error">
@@ -86,20 +82,18 @@ export default function LoginScreen() {
           </View>
         )}
 
-        {/* Login Button */}
         <SharedButton
-          label="Entrar"
+          label="Log In"
           onPress={handleLogin}
           loading={loading}
           disabled={!email || !password || loading}
-          size="lg"
+          size="sm"
           style={{ marginBottom: spacing.lg }}
         />
 
-        {/* Link to Register */}
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.xs }}>
           <SharedText variant="body" color="textSecondary">
-            Não tem conta?
+            Don't have an account?
           </SharedText>
           <SharedText
             variant="body"
@@ -107,7 +101,7 @@ export default function LoginScreen() {
             weight="600"
             onPress={handleNavigateToRegister}
           >
-            Cadastre-se
+            Sign up
           </SharedText>
         </View>
       </View>
