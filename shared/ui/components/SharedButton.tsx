@@ -1,14 +1,13 @@
+import { colors } from '@/shared/constants/colors';
+import { borderRadius, spacing } from '@/shared/constants/spacing';
 import React from 'react';
 import {
-  TouchableOpacity,
   ActivityIndicator,
-  View,
   StyleProp,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
-import { colors } from '@/shared/constants/colors';
-import { spacing } from '@/shared/constants/spacing';
-import { borderRadius } from '@/shared/constants/spacing';
 import SharedText from './SharedText';
 
 type Variant = 'primary' | 'secondary' | 'outline' | 'ghost';
@@ -54,17 +53,14 @@ const sizeStyles = {
   sm: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
-    height: 32,
   },
   md: {
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
-    height: 40,
   },
   lg: {
     paddingVertical: spacing.lg,
     paddingHorizontal: spacing.xl,
-    height: 48,
   },
 };
 
@@ -112,8 +108,8 @@ export default function SharedButton({
         <>
           {leftIcon && <View style={{ marginRight: spacing.sm }}>{leftIcon}</View>}
           <SharedText
-            variant={size === 'lg' ? 'label' : 'caption'}
-            color={isDisabled ? colors.textDisabled : variantStyle.text}
+            variant="label"
+            color={isDisabled ? colors.surface : variantStyle.text}
             weight="600"
           >
             {label}
