@@ -3,7 +3,7 @@ import { SharedScreen, SharedText, SharedButton, SharedCard, SharedLogCard } fro
 import { colors } from '@/shared/constants/colors'
 import { spacing } from '@/shared/constants/spacing'
 import { router } from 'expo-router'
-import { ActivityIndicator, ScrollView, View } from 'react-native'
+import { ActivityIndicator, FlatList, View } from 'react-native'
 
 export default function HistoryScreen() {
   const { logs, loading, error, deleting, deleteLog } = useHistory()
@@ -47,32 +47,55 @@ export default function HistoryScreen() {
     )
   }
 
+  const renderLog = ({ item }: any) => (
+    <SharedLogCard log={item} onDelete={deleteLog} deleting={deleting} />
+  )
+
   return (
-    <SharedScreen>
-      <SharedButton
-        label="← Back"
-        variant="ghost"
-        size="sm"
-        onPress={() => router.push('/(app)' as never)}
-        style={{ alignSelf: 'flex-start', marginBottom: spacing.md }}
+    <SharedScreen scrollable={false}>
+      <FlatList
+        data={logs}
+        keyExtractor={(item) => item.id}
+        renderItem={renderLog}
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingHorizontal: spacing.lg,
+          paddingVertical: spacing.lg,
+          paddingBottom: spacing.lg,
+          gap: spacing.md,
+        }}
+        ListHeaderComponent={
+          <View>
+            <SharedButton
+              label="← Back"
+              variant="ghost"
+              size="sm"
+              onPress={() => router.push('/(app)' as never)}
+              style={{ alignSelf: 'flex-start', marginBottom: spacing.md }}
+            />
+
+            <SharedText variant="h2" style={{ marginBottom: spacing.lg }}>
+              Your History
+            </SharedText>
+
+            {error && (
+              <SharedCard
+                padding="md"
+                shadow="sm"
+                style={{
+                  marginBottom: spacing.md,
+                  backgroundColor: colors.errorLight,
+                }}
+              >
+                <SharedText variant="body" color="error">
+                  {error}
+                </SharedText>
+              </SharedCard>
+            )}
+          </View>
+        }
       />
-      <SharedText variant="h2" style={{ marginBottom: spacing.lg }}>
-        Your History
-      </SharedText>
-      {error && (
-        <SharedCard padding="md" shadow="sm" style={{ marginBottom: spacing.md, backgroundColor: colors.errorLight }}>
-          <SharedText variant="body" color="error">
-            {error}
-          </SharedText>
-        </SharedCard>
-      )}
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-        <View style={{ paddingBottom: spacing.lg }}>
-          {logs.map(log => (
-            <SharedLogCard key={log.id} log={log} onDelete={deleteLog} deleting={deleting} />
-          ))}
-        </View>
-      </ScrollView>
     </SharedScreen>
   )
 }

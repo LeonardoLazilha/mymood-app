@@ -3,7 +3,7 @@ import { SharedButton, SharedCard, SharedScreen, SharedText } from '@/shared/ui'
 import { colors } from '@/shared/constants/colors'
 import { spacing } from '@/shared/constants/spacing'
 import { useRouter } from 'expo-router'
-import { ActivityIndicator, ScrollView, View } from 'react-native'
+import { ActivityIndicator, FlatList, View } from 'react-native'
 import Markdown from 'react-native-markdown-display'
 
 const markdownStyles = {
@@ -65,99 +65,107 @@ export default function InsightsScreen() {
     )
   }
 
+  const renderInsight = ({ item }: any) => (
+    <SharedCard padding="md" shadow="sm">
+      <View style={{ marginBottom: spacing.sm }}>
+        <SharedText variant="caption" color="textSecondary">
+          {formatDate(item.generatedAt)}
+        </SharedText>
+      </View>
+      <Markdown style={markdownStyles}>
+        {item.content}
+      </Markdown>
+    </SharedCard>
+  )
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <SharedScreen scrollable={false}>
-        <SharedButton
-          label="← Back"
-          variant="ghost"
-          size="sm"
-          onPress={() => router.push('/(app)' as never)}
-          style={{ alignSelf: 'flex-start', marginBottom: spacing.md }}
-        />
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.lg }}
+        <FlatList
+          data={insights}
+          keyExtractor={(item) => item.id}
+          renderItem={renderInsight}
           showsVerticalScrollIndicator={false}
-        >
-          <View style={{ marginBottom: spacing.xl }}>
-            <SharedText variant="h2" color="textPrimary">
-              Insights ✨
-            </SharedText>
-            <SharedText variant="body" color="textSecondary" style={{ marginTop: spacing.sm }}>
-              AI-powered insights from your last 14 days
-            </SharedText>
-          </View>
-
-          {error && (
-            <SharedCard padding="md" shadow="sm" style={{ marginBottom: spacing.lg, backgroundColor: colors.errorLight }}>
-              <SharedText variant="body" color="error">
-                {error}
-              </SharedText>
-            </SharedCard>
-          )}
-
-          {logs.length > 0 ? (
-            <>
-              {currentInsight ? (
-                <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg, backgroundColor: colors.primaryLight }}>
-                  <SharedText variant="body" color="textPrimary" weight="600" style={{ marginBottom: spacing.md }}>
-                    Today's Insight
-                  </SharedText>
-                  <Markdown style={markdownStyles}>
-                    {currentInsight}
-                  </Markdown>
-                </SharedCard>
-              ) : null}
-
-              <SharedButton
-                label={generatingInsight ? 'Generating...' : 'Generate New Insight'}
-                variant="primary"
-                size="lg"
-                onPress={generateInsight}
-                disabled={generatingInsight}
-                style={{ marginBottom: spacing.lg }}
-              />
-            </>
-          ) : (
-            <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
-              <View style={{ alignItems: 'center', paddingVertical: spacing.md }}>
-                <SharedText variant="body" color="textSecondary" style={{ textAlign: 'center', marginBottom: spacing.md }}>
-                  Add some logs to generate insights
-                </SharedText>
-                <SharedButton
-                  label="Log your mood"
-                  variant="primary"
-                  size="md"
-                  onPress={() => router.push('/(app)/log' as never)}
-                />
-              </View>
-            </SharedCard>
-          )}
-
-          {insights.length > 0 && (
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            paddingHorizontal: spacing.lg,
+            paddingVertical: spacing.lg,
+            paddingBottom: spacing.lg,
+            gap: spacing.md,
+          }}
+          ListHeaderComponent={
             <View>
-              <SharedText variant="h3" color="textPrimary" style={{ marginBottom: spacing.md }}>
-                Recent insights
-              </SharedText>
-              <View style={{ gap: spacing.md }}>
-                {insights.map((insight) => (
-                  <SharedCard key={insight.id} padding="md" shadow="sm">
-                    <View style={{ marginBottom: spacing.sm }}>
-                      <SharedText variant="caption" color="textSecondary">
-                        {formatDate(insight.generatedAt)}
-                      </SharedText>
-                    </View>
-                    <Markdown style={markdownStyles}>
-                      {insight.content}
-                    </Markdown>
-                  </SharedCard>
-                ))}
-              </View>
-            </View>
-          )}
+              <SharedButton
+                label="← Back"
+                variant="ghost"
+                size="sm"
+                onPress={() => router.push('/(app)' as never)}
+                style={{ alignSelf: 'flex-start', marginBottom: spacing.md }}
+              />
 
-          <View style={{ height: spacing.lg }} />
-        </ScrollView>
+              <View style={{ marginBottom: spacing.xl }}>
+                <SharedText variant="h2" color="textPrimary">
+                  Insights ✨
+                </SharedText>
+                <SharedText variant="body" color="textSecondary" style={{ marginTop: spacing.sm }}>
+                  AI-powered insights from your last 14 days
+                </SharedText>
+              </View>
+
+              {error && (
+                <SharedCard padding="md" shadow="sm" style={{ marginBottom: spacing.lg, backgroundColor: colors.errorLight }}>
+                  <SharedText variant="body" color="error">
+                    {error}
+                  </SharedText>
+                </SharedCard>
+              )}
+
+              {logs.length > 0 ? (
+                <View style={{ marginBottom: spacing.lg }}>
+                  {currentInsight ? (
+                    <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg, backgroundColor: colors.primaryLight }}>
+                      <SharedText variant="body" color="textPrimary" weight="600" style={{ marginBottom: spacing.md }}>
+                        Today's Insight
+                      </SharedText>
+                      <Markdown style={markdownStyles}>
+                        {currentInsight}
+                      </Markdown>
+                    </SharedCard>
+                  ) : null}
+
+                  <SharedButton
+                    label={generatingInsight ? 'Generating...' : 'Generate New Insight'}
+                    variant="primary"
+                    size="lg"
+                    onPress={generateInsight}
+                    disabled={generatingInsight}
+                    style={{ marginBottom: spacing.lg }}
+                  />
+                </View>
+              ) : (
+                <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
+                  <View style={{ alignItems: 'center', paddingVertical: spacing.md }}>
+                    <SharedText variant="body" color="textSecondary" style={{ textAlign: 'center', marginBottom: spacing.md }}>
+                      Add some logs to generate insights
+                    </SharedText>
+                    <SharedButton
+                      label="Log your mood"
+                      variant="primary"
+                      size="md"
+                      onPress={() => router.push('/(app)/log' as never)}
+                    />
+                  </View>
+                </SharedCard>
+              )}
+
+              {insights.length > 0 && (
+                <SharedText variant="h3" color="textPrimary" style={{ marginBottom: spacing.md }}>
+                  Recent insights
+                </SharedText>
+              )}
+            </View>
+          }
+        />
       </SharedScreen>
     </View>
   )
