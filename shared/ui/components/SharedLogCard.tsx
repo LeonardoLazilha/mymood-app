@@ -1,8 +1,9 @@
-import React, { StyleProp, ViewStyle } from 'react-native'
-import { View, ActivityIndicator } from 'react-native'
-import { colors } from '@/shared/constants/colors'
 import { spacing } from '@/shared/constants/spacing'
-import { SharedCard, SharedText, SharedButton, SharedBadge } from '.'
+import { SharedBadge } from '@/shared/ui/components/SharedBadge'
+import { SharedButton } from '@/shared/ui/components/SharedButton'
+import { SharedCard } from '@/shared/ui/components/SharedCard'
+import { SharedText } from '@/shared/ui/components/SharedText'
+import { StyleProp, View, ViewStyle } from 'react-native'
 
 interface Log {
   id: string
@@ -35,7 +36,7 @@ const formatDate = (dateString: string): string => {
   })
 }
 
-export default function SharedLogCard({
+export function SharedLogCard({
   log,
   onDelete,
   deleting,
@@ -109,4 +110,4 @@ export default function SharedLogCard({
   )
 }
 
-export { SharedLogCard }
+export default SharedLogCard

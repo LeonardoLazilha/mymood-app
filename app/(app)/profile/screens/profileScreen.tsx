@@ -69,7 +69,6 @@ export default function ProfileScreen() {
 
         <SharedDivider />
 
-        {/* Account Info */}
         <View style={{ marginVertical: spacing.lg }}>
           <SharedCard padding="lg" shadow="md">
             <SharedText variant="label" color="textSecondary">
@@ -81,9 +80,20 @@ export default function ProfileScreen() {
           </SharedCard>
         </View>
 
-        <SharedDivider />
+          <View style={{ marginVertical: spacing.lg }}>
+          <SharedCard padding="lg" shadow="md">
+            <SharedText variant="h3" color="textPrimary" style={{ marginTop: spacing.sm }}>
+              Discover the app's design system!
+            </SharedText>
+              <SharedText variant="label" color="textSecondary">
+              Explore the colors, typography, and spacing that create a cohesive and delightful user experience.
+            </SharedText>
+            <SharedButton label="Discover" size="sm" variant='secondary' onPress={() => router.push('/(app)/styleguide' as never)} />
+          </SharedCard>
+        </View>
 
-        {/* Sign Out Button */}
+         <SharedDivider />
+
         <View style={{ marginBottom: spacing.lg }}>
           <SharedButton
             label="Sign Out"
