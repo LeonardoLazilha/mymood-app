@@ -18,10 +18,11 @@ export const historyService = {
       .order('created_at', { ascending: false })
   },
 
-  deleteLog: async (id: string) => {
+  deleteLog: async (id: string, userId: string) => {
     return supabase
       .from('logs')
       .delete()
       .eq('id', id)
+      .eq('user_id', userId)
   },
 }

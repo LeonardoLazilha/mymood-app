@@ -20,8 +20,15 @@ export function useLog() {
   }
 
   const handleSave = async () => {
-    if (mood === null) {
-      setError('Please select a mood')
+    // Validate mood
+    if (mood === null || mood < 1 || mood > 10) {
+      setError('Please select a mood between 1 and 10')
+      return
+    }
+
+    // Validate note length
+    if (note && note.length > 500) {
+      setError('Note must be under 500 characters')
       return
     }
 
@@ -44,14 +51,16 @@ export function useLog() {
       })
 
       if (insertError) {
-        setError(insertError.message)
+        console.error('Save log error:', insertError)
+        setError('Failed to save log. Please try again.')
         setLoading(false)
         return
       }
 
       return { success: true }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      console.error('Save log error:', err)
+      setError('An error occurred while saving. Please try again.')
       setLoading(false)
       return { success: false }
     }

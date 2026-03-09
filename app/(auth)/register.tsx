@@ -31,9 +31,11 @@ export default function RegisterScreen() {
       });
 
       if (signUpError) {
-        setError(signUpError.message);
+        console.error('Registration error:', signUpError);
+        setError('Registration failed. Please check your email and try again.');
       }
     } catch (err) {
+      console.error('Registration error:', err);
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);

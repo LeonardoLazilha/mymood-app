@@ -52,11 +52,19 @@ export function useHistory() {
   const deleteLog = async (id: string) => {
     try {
       setDeleting(id)
-      const { error: deleteError } = await historyService.deleteLog(id)
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setError('User not found')
+        setDeleting(null)
+        return
+      }
+
+      const { error: deleteError } = await historyService.deleteLog(id, user.id)
 
       if (deleteError) {
         console.error('Error deleting log:', deleteError)
-        setError(`Failed to delete: ${deleteError.message}`)
+        setError('Failed to delete log. Please try again.')
         setDeleting(null)
         return
       }
@@ -65,7 +73,7 @@ export function useHistory() {
       setError(null)
     } catch (err) {
       console.error('Error deleting log:', err)
-      setError(err instanceof Error ? err.message : 'Failed to delete log')
+      setError('Failed to delete log. Please try again.')
       setDeleting(null)
     }
   }

@@ -26,9 +26,11 @@ export default function LoginScreen() {
       });
 
       if (signInError) {
-        setError(signInError.message);
+        console.error('Login error:', signInError);
+        setError('Invalid email or password. Please try again.');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
