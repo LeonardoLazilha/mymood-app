@@ -1,4 +1,5 @@
 import { colors } from '@/shared/constants/colors';
+import { spacing } from '@/shared/constants/spacing';
 import React from 'react';
 import {
   SafeAreaView,
@@ -30,24 +31,24 @@ export default function SharedScreen({
   ];
 
   if (scrollable) {
-    return (
-      <SafeAreaView style={safeAreaStyle}>
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
-          {...scrollProps}
-        >
-          {children}
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
-
   return (
-    <SafeAreaView style={safeAreaStyle}>
-      {children}
+    <SafeAreaView style={[{ flex: 1, backgroundColor: colors.background }, style]}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: spacing.md }}
+        showsVerticalScrollIndicator={false}
+        {...scrollProps}
+      >
+        {children}
+      </ScrollView>
     </SafeAreaView>
-  );
+  )
+}
+
+return (
+  <SafeAreaView style={[{ flex: 1, backgroundColor: colors.background, paddingHorizontal: spacing.md }, style]}>
+    {children}
+  </SafeAreaView>
+)
 }
 
 export { SharedScreen };

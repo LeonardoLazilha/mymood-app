@@ -66,6 +66,13 @@ export default function LogScreen() {
   return (
     <SharedScreen>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <SharedButton
+          label="← Back"
+          variant="ghost"
+          size="sm"
+          onPress={() => router.push('/(app)' as never)}
+          style={{ alignSelf: 'flex-start', marginBottom: spacing.md }}
+        />
         <SharedText variant="h2" style={{ marginBottom: spacing.lg }}>
           How are you feeling today?
         </SharedText>
