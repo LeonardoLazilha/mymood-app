@@ -1,65 +1,29 @@
-import { supabase } from '@/lib/supabase'
+import { useLog } from '../hooks/useLog'
+import { SharedButton, SharedScreen, SharedText, SharedBadge } from '@/shared/ui'
 import { colors } from '@/shared/constants/colors'
 import { spacing } from '@/shared/constants/spacing'
-import { SharedBadge, SharedButton, SharedScreen, SharedText } from '@/shared/ui'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
-
-const SYMPTOMS = ['headache', 'fatigue', 'anxiety', 'sadness', 'irritability', 'insomnia', 'low energy', 'brain fog']
 
 export default function LogScreen() {
   const router = useRouter()
-  const [mood, setMood] = useState<number | null>(null)
-  const [note, setNote] = useState('')
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    mood,
+    setMood,
+    note,
+    setNote,
+    selectedSymptoms,
+    loading,
+    error,
+    handleSymptomToggle,
+    handleSave,
+    SYMPTOMS,
+  } = useLog()
 
-  const handleSymptomToggle = (symptom: string) => {
-    setSelectedSymptoms(prev =>
-      prev.includes(symptom)
-        ? prev.filter(s => s !== symptom)
-        : [...prev, symptom]
-    )
-  }
-
-  const handleSave = async () => {
-    if (mood === null) {
-      setError('Please select a mood')
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        setError('User not found')
-        setLoading(false)
-        return
-      }
-
-      const { error: insertError } = await supabase
-        .from('logs')
-        .insert({
-          user_id: user.id,
-          mood,
-          note: note || null,
-          symptoms: selectedSymptoms,
-        })
-
-      if (insertError) {
-        setError(insertError.message)
-        setLoading(false)
-        return
-      }
-
+  const onSave = async () => {
+    const result = await handleSave()
+    if (result?.success) {
       router.replace('/(app)/' as never)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-      setLoading(false)
     }
   }
 
@@ -149,7 +113,7 @@ export default function LogScreen() {
 
         <SharedButton
           label="Save"
-          onPress={handleSave}
+          onPress={onSave}
           loading={loading}
           disabled={loading}
           style={{ marginTop: spacing.lg }}
