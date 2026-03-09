@@ -7,6 +7,7 @@ import {
   SharedCard,
   SharedDivider,
   SharedInput,
+  SharedLogCard,
   SharedScreen,
   SharedTabBar,
   SharedText,
@@ -622,6 +623,68 @@ export default function StyleguideScreen() {
                   </View>
                 </View>
               ))}
+            </View>
+          </View>
+
+          <View style={{ height: spacing.xl }} />
+
+          <SharedDivider />
+
+          {/* LogCard Section */}
+          <View style={sectionStyle}>
+            <SharedText variant="h2" color="textPrimary">
+              Log Card
+            </SharedText>
+
+            <View style={{ gap: spacing.md }}>
+              <SharedLogCard
+                log={{
+                  id: '1',
+                  user_id: 'user123',
+                  mood: 8,
+                  note: 'Had a great day today! Feeling energetic and positive.',
+                  symptoms: ['Happy', 'Energized'],
+                  created_at: new Date().toISOString(),
+                }}
+                onDelete={async () => console.log('Delete pressed')}
+              />
+
+              <SharedLogCard
+                log={{
+                  id: '2',
+                  user_id: 'user123',
+                  mood: 5,
+                  note: 'Neutral mood, just another regular day.',
+                  symptoms: ['Neutral'],
+                  created_at: new Date(Date.now() - 86400000).toISOString(),
+                }}
+                onDelete={async () => console.log('Delete pressed')}
+              />
+
+              <SharedLogCard
+                log={{
+                  id: '3',
+                  user_id: 'user123',
+                  mood: 3,
+                  note: 'Feeling a bit down today.',
+                  symptoms: ['Sad', 'Tired'],
+                  created_at: new Date(Date.now() - 172800000).toISOString(),
+                }}
+                onDelete={async () => console.log('Delete pressed')}
+              />
+
+              <SharedLogCard
+                log={{
+                  id: '4',
+                  user_id: 'user123',
+                  mood: 6,
+                  note: null,
+                  symptoms: [],
+                  created_at: new Date(Date.now() - 259200000).toISOString(),
+                }}
+                onDelete={async () => console.log('Delete pressed')}
+                deleting="4"
+              />
             </View>
           </View>
 
