@@ -1,0 +1,146 @@
+import { useHome } from '../hooks/useHome'
+import { SharedButton, SharedCard, SharedScreen, SharedTabBar, SharedText } from '@/shared/ui'
+import { colors } from '@/shared/constants/colors'
+import { spacing } from '@/shared/constants/spacing'
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { ActivityIndicator, ScrollView, View } from 'react-native'
+
+const tabs = [
+  { key: 'home', label: 'Home', icon: <Ionicons name="home-outline" size={22} color={colors.textSecondary} /> },
+  { key: 'history', label: 'History', icon: <Ionicons name="time-outline" size={22} color={colors.textSecondary} /> },
+  { key: 'log', label: 'Log', icon: <Ionicons name="add-circle-outline" size={22} color={colors.textSecondary} /> },
+  { key: 'insights', label: 'Insights', icon: <Ionicons name="sparkles-outline" size={22} color={colors.textSecondary} /> },
+  { key: 'profile', label: 'Profile', icon: <Ionicons name="person-outline" size={22} color={colors.textSecondary} /> },
+]
+
+export default function HomeScreen() {
+  const router = useRouter()
+  const {
+    userEmail,
+    logs,
+    loading,
+    getGreeting,
+    formatDate,
+    isTodayLogged,
+  } = useHome()
+
+  const handleTabChange = (key: string) => {
+    if (key === 'home') return
+    router.push(`/(app)/${key}` as never)
+  }
+
+  if (loading) {
+    return (
+      <SharedScreen>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SharedScreen>
+    )
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <SharedScreen scrollable={false}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.lg }} showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View style={{ marginBottom: spacing.xl }}>
+            <SharedText variant="h2" color="textPrimary">
+              {getGreeting()} 👋
+            </SharedText>
+            {userEmail && (
+              <SharedText variant="body" color="textSecondary" style={{ marginTop: spacing.sm }}>
+                {userEmail}
+              </SharedText>
+            )}
+          </View>
+
+          {/* Today's Mood Card */}
+          {isTodayLogged() ? (
+            <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View>
+                  <SharedText variant="body" color="textSecondary">
+                    Today's mood
+                  </SharedText>
+                  <SharedText variant="h2" color="textPrimary" style={{ marginTop: spacing.sm }}>
+                    {logs[0].mood}/10
+                  </SharedText>
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                  <SharedText variant="h1" color="primary">
+                    {logs[0].mood >= 7 ? '😊' : logs[0].mood >= 5 ? '😐' : '😕'}
+                  </SharedText>
+                </View>
+              </View>
+              {logs[0].note && (
+                <SharedText variant="body" color="textPrimary" style={{ marginTop: spacing.md }}>
+                  "{logs[0].note}"
+                </SharedText>
+              )}
+            </SharedCard>
+          ) : (
+            <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
+              <SharedText variant="body" color="textSecondary" style={{ marginBottom: spacing.md }}>
+                You haven't logged your mood today yet
+              </SharedText>
+              <SharedButton
+                label="Log your mood today"
+                variant="primary"
+                size="md"
+                onPress={() => router.push('/(app)/log' as never)}
+              />
+            </SharedCard>
+          )}
+
+          {/* Recent Logs Section */}
+          <View style={{ marginBottom: spacing.lg }}>
+            <SharedText variant="h3" color="textPrimary" style={{ marginBottom: spacing.md }}>
+              Recent logs
+            </SharedText>
+
+            {logs.length === 0 ? (
+              <SharedCard padding="lg" shadow="sm">
+                <View style={{ alignItems: 'center', paddingVertical: spacing.lg }}>
+                  <SharedText variant="body" color="textSecondary" style={{ textAlign: 'center' }}>
+                    No logs yet. Start by logging your mood!
+                  </SharedText>
+                </View>
+              </SharedCard>
+            ) : (
+              <View style={{ gap: spacing.md }}>
+                {logs.slice(isTodayLogged() ? 1 : 0).map((log) => (
+                  <SharedCard key={log.id} padding="md" shadow="sm">
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <View>
+                        <SharedText variant="body" color="textPrimary" weight="600">
+                          Mood: {log.mood}/10
+                        </SharedText>
+                        <SharedText variant="caption" color="textSecondary" style={{ marginTop: spacing.xs }}>
+                          {formatDate(log.createdAt)}
+                        </SharedText>
+                        {log.note && (
+                          <SharedText variant="caption" color="textPrimary" style={{ marginTop: spacing.sm, maxWidth: 200 }} numberOfLines={1}>
+                            {log.note}
+                          </SharedText>
+                        )}
+                      </View>
+                      <SharedText variant="h3" color="primary">
+                        {log.mood >= 7 ? '😊' : log.mood >= 5 ? '😐' : '😕'}
+                      </SharedText>
+                    </View>
+                  </SharedCard>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <View style={{ height: spacing.lg }} />
+        </ScrollView>
+      </SharedScreen>
+
+      <SharedTabBar tabs={tabs} activeTab="home" onTabChange={handleTabChange} />
+    </View>
+  )
+}
