@@ -12,10 +12,10 @@ import {
   SharedTabBar,
   SharedText,
 } from '@/shared/ui';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function StyleguideScreen() {
   const router = useRouter()
@@ -31,7 +31,7 @@ export default function StyleguideScreen() {
   return (
       <SharedScreen>
         <SharedButton
-          label="← Voltar"
+          label="← Back"
           variant="ghost"
           size="sm"
           onPress={() => router.back()}

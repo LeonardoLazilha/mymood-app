@@ -89,7 +89,7 @@ export function SharedLogCard({
                 <SharedBadge
                   key={symptom}
                   label={symptom}
-                  variant="neutral"
+                  variant="warning"
                   size="sm"
                 />
               ))}

@@ -1,10 +1,10 @@
-import { useHome } from '../hooks/useHome'
-import { SharedButton, SharedCard, SharedScreen, SharedTabBar, SharedText } from '@/shared/ui'
 import { colors } from '@/shared/constants/colors'
 import { spacing } from '@/shared/constants/spacing'
+import { SharedButton, SharedCard, SharedScreen, SharedTabBar, SharedText } from '@/shared/ui'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { ActivityIndicator, FlatList, View } from 'react-native'
+import { useHome } from '../hooks/useHome'
 
 const tabs = [
   { key: 'home', label: 'Home', icon: <Ionicons name="home-outline" size={22} color={colors.textSecondary} /> },
@@ -16,6 +16,7 @@ const tabs = [
 
 export default function HomeScreen() {
   const router = useRouter()
+
   const {
     userEmail,
     logs,
@@ -45,20 +46,31 @@ export default function HomeScreen() {
   const renderRecentLog = ({ item }: any) => (
     <SharedCard padding="md" shadow="sm">
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View>
-          <SharedText variant="body" color="textPrimary" weight="600">
+        <View style={{ flex: 1 }}>
+          <SharedText variant="body" weight="600">
             Mood: {item.mood}/10
           </SharedText>
-          <SharedText variant="caption" color="textSecondary" style={{ marginTop: spacing.xs }}>
+
+          <SharedText
+            variant="caption"
+            color="textSecondary"
+            style={{ marginTop: spacing.xs }}
+          >
             {formatDate(item.createdAt)}
           </SharedText>
+
           {item.note && (
-            <SharedText variant="caption" color="textPrimary" style={{ marginTop: spacing.sm, maxWidth: 200 }} numberOfLines={1}>
+            <SharedText
+              variant="caption"
+              style={{ marginTop: spacing.sm }}
+              numberOfLines={1}
+            >
               {item.note}
             </SharedText>
           )}
         </View>
-        <SharedText variant="h3" color="primary">
+
+        <SharedText variant="h2" color="primary">
           {item.mood >= 7 ? '😊' : item.mood >= 5 ? '😐' : '😕'}
         </SharedText>
       </View>
@@ -68,90 +80,173 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <SharedScreen scrollable={false}>
-        <FlatList
-          data={recentLogs}
-          keyExtractor={(item) => item.id}
-          renderItem={renderRecentLog}
-          showsVerticalScrollIndicator={false}
-          style={{ flex: 1 }}
-          contentContainerStyle={{
-            paddingHorizontal: spacing.lg,
-            paddingVertical: spacing.lg,
-            paddingBottom: spacing.lg,
-            gap: spacing.md,
-          }}
-          ListHeaderComponent={
-            <View>
-              {/* Header */}
-              <View style={{ marginBottom: spacing.xl }}>
-                <SharedText variant="h2" color="textPrimary">
-                  {getGreeting()} 👋
-                </SharedText>
-                {userEmail && (
-                  <SharedText variant="body" color="textSecondary" style={{ marginTop: spacing.sm }}>
-                    {userEmail}
-                  </SharedText>
-                )}
-              </View>
 
-              {/* Today's Mood Card */}
-              {isTodayLogged() ? (
-                <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <View>
-                      <SharedText variant="body" color="textSecondary">
-                        Today's mood
-                      </SharedText>
-                      <SharedText variant="h2" color="textPrimary" style={{ marginTop: spacing.sm }}>
-                        {logs[0].mood}/10
-                      </SharedText>
-                    </View>
-                    <View style={{ alignItems: 'center' }}>
+        <View style={{ flex: 1, position: 'relative' }}>
+
+          {/* Decorative circles */}
+          <View
+            style={{
+              position: 'absolute',
+              top: -spacing.xl,
+              right: -spacing.xl,
+              width: spacing.xl * 12,
+              height: spacing.xl * 12,
+              borderRadius: spacing.xl * 6,
+              backgroundColor: colors.primary,
+              opacity: 0.08,
+            }}
+          />
+
+          <View
+            style={{
+              position: 'absolute',
+              top: spacing.xl * 3,
+              left: -spacing.xl * 3,
+              width: spacing.xl * 7,
+              height: spacing.xl * 7,
+              borderRadius: spacing.xl * 3.5,
+              backgroundColor: colors.primary,
+              opacity: 0.08,
+            }}
+          />
+
+          <FlatList
+            data={recentLogs}
+            keyExtractor={(item) => item.id}
+            renderItem={renderRecentLog}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: spacing.lg,
+              paddingBottom: spacing.xl,
+              gap: spacing.md,
+            }}
+
+            ListHeaderComponent={
+              <View style={{ zIndex: 1 }}>
+
+                {/* Header */}
+                <View
+                  style={{
+                    paddingTop: spacing.xl,
+                    paddingBottom: spacing.xl,
+                    marginBottom: spacing.lg,
+                  }}
+                >
+                  <SharedText variant="h2">
+                    {getGreeting()} 👋
+                  </SharedText>
+
+                  {userEmail && (
+                    <SharedText
+                      variant="body"
+                      color="textSecondary"
+                      style={{ marginTop: spacing.sm }}
+                    >
+                      {userEmail}
+                    </SharedText>
+                  )}
+                </View>
+
+                {/* Today card */}
+                {isTodayLogged() ? (
+                  <SharedCard
+                    padding="lg"
+                    shadow="md"
+                    style={{
+                      marginBottom: spacing.xl,
+                      backgroundColor: colors.primaryLight,
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                      <View>
+                        <SharedText variant="body" color="textSecondary">
+                          Today's mood
+                        </SharedText>
+
+                        <SharedText
+                          variant="h1"
+                          style={{ marginTop: spacing.sm }}
+                        >
+                          {logs[0].mood}/10
+                        </SharedText>
+                      </View>
+
                       <SharedText variant="h1" color="primary">
                         {logs[0].mood >= 7 ? '😊' : logs[0].mood >= 5 ? '😐' : '😕'}
                       </SharedText>
+
                     </View>
-                  </View>
-                  {logs[0].note && (
-                    <SharedText variant="body" color="textPrimary" style={{ marginTop: spacing.md }}>
-                      "{logs[0].note}"
+
+                    {logs[0].note && (
+                      <SharedText
+                        variant="body"
+                        style={{ marginTop: spacing.md }}
+                      >
+                        "{logs[0].note}"
+                      </SharedText>
+                    )}
+                  </SharedCard>
+                ) : (
+                  <SharedCard
+                    padding="lg"
+                    shadow="md"
+                    style={{ marginBottom: spacing.xl }}
+                  >
+                    <SharedText
+                      variant="body"
+                      color="textSecondary"
+                      style={{ marginBottom: spacing.md }}
+                    >
+                      You haven't logged your mood today yet
                     </SharedText>
-                  )}
-                </SharedCard>
-              ) : (
-                <SharedCard padding="lg" shadow="md" style={{ marginBottom: spacing.lg }}>
-                  <SharedText variant="body" color="textSecondary" style={{ marginBottom: spacing.md }}>
-                    You haven't logged your mood today yet
+
+                    <SharedButton
+                      label="Log your mood today"
+                      variant="primary"
+                      size="md"
+                      onPress={() => router.push('/(app)/log' as never)}
+                    />
+                  </SharedCard>
+                )}
+
+                {/* Section title */}
+                {recentLogs.length > 0 && (
+                  <SharedText
+                    variant="h3"
+                    style={{ marginBottom: spacing.sm }}
+                  >
+                    Recent logs
                   </SharedText>
-                  <SharedButton
-                    label="Log your mood today"
-                    variant="primary"
-                    size="md"
-                    onPress={() => router.push('/(app)/log' as never)}
-                  />
-                </SharedCard>
-              )}
+                )}
 
-              {/* Recent Logs Section */}
-              <SharedText variant="h3" color="textPrimary" style={{ marginBottom: spacing.md }}>
-                Recent logs
-              </SharedText>
+                {/* Empty state */}
+                {logs.length === 0 && (
+                  <SharedCard padding="lg" shadow="sm">
+                    <View style={{ alignItems: 'center', paddingVertical: spacing.lg }}>
+                      <SharedText
+                        variant="body"
+                        color="textSecondary"
+                        style={{ textAlign: 'center' }}
+                      >
+                        No logs yet. Start by logging your mood!
+                      </SharedText>
+                    </View>
+                  </SharedCard>
+                )}
 
-              {logs.length === 0 && (
-                <SharedCard padding="lg" shadow="sm" style={{ marginBottom: spacing.md }}>
-                  <View style={{ alignItems: 'center', paddingVertical: spacing.lg }}>
-                    <SharedText variant="body" color="textSecondary" style={{ textAlign: 'center' }}>
-                      No logs yet. Start by logging your mood!
-                    </SharedText>
-                  </View>
-                </SharedCard>
-              )}
-            </View>
-          }
-        />
+              </View>
+            }
+          />
+        </View>
+
       </SharedScreen>
 
-      <SharedTabBar tabs={tabs} activeTab="home" onTabChange={handleTabChange} />
+      <SharedTabBar
+        tabs={tabs}
+        activeTab="home"
+        onTabChange={handleTabChange}
+      />
     </View>
   )
 }
