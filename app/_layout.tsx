@@ -10,7 +10,6 @@ export default function RootLayout() {
   const segments = useSegments()
 
   useEffect(() => {
-    // Use getUser() instead of getSession() for better security
     supabase.auth.getUser().then(({ data: { user } }) => {
       setSession(user ? { user, access_token: '', refresh_token: '' } as any : null)
       setLoading(false)

@@ -1,50 +1,113 @@
-# Welcome to your Expo app 👋
+# Hey, Topflight! 🚀
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> I built this app over a weekend to learn the exact stack you use — React Native, Supabase, and TypeScript. It's a simple mood & symptom tracker with AI-powered insights using the Anthropic API.
 
-## Get started
+---
 
-1. Install dependencies
+## About me
 
-   ```bash
-   npm install
-   ```
+I'm Leonardo Lazilha, software developer from Brazil. I pick up new technologies fast.
+I work daily with Java, Angular, SQL Server and React Native in my current role, and spend my weekends building side projects with React, Node.js, TypeScript, Supabase, and Next.js. I love learning by doing, which is exactly why I built MyMood before even having a first conversation with the Topflight team.
+I'm excited about the possibility of joining Topflight because I genuinely enjoy building products that solve real problems. I'm comfortable working across the stack, adapting to new codebases quickly, and collaborating with teams remotely. I'm not looking for a comfortable job — I'm looking for a place where I can grow fast, contribute meaningfully, and help ship great products for your clients.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## Why I built this
 
-In the output, you'll find options to open the app in a
+I applied for a position at Topflight Apps and wanted to show — not just tell — that I can work with your stack. So instead of just listing technologies on a resume, I built something real with them.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## What it does
 
-## Get a fresh project
+- **Log your mood** (1–10) 
+- **Track history** 
+- **AI Insights** — personalized wellness insights using Claude (Anthropic API) via Supabase Edge Functions
+- **Profile** (with design system showcase, only for show)
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | React Native + Expo Router |
+| Language | TypeScript |
+| Styling | NativeWind + custom design tokens |
+| Backend | Supabase (Auth + PostgreSQL + Edge Functions) |
+| ORM | Drizzle ORM |
+| AI | Anthropic API (claude-haiku) via Supabase Edge Function |
+| Navigation | Expo Router (file-based) |
+
+---
+
+## Architecture
+
+The app follows a 3-layer module architecture:
+
+```
+app/(app)/
+  [module]/
+    index.tsx                    ← Expo Router entry
+    screens/[module]Screen.tsx   ← UI only
+    hooks/use[Module].ts         ← state + logic
+    services/[module]Service.ts  ← Supabase calls only
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Key Features & Implementation
 
-To learn more about developing your project with Expo, look at the following resources:
+###  Auth & Security
+- Supabase email/password auth with persistent sessions
+- Auth guard
+- Row Level Security (RLS)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### AI Insights via Edge Function
+- Supabase Edge Function (Deno) calls Anthropic API
+- Claude generates a personalized wellness insight
 
-## Join the community
+### Design System
+- Custom `Shared*` component library (`SharedButton`, `SharedCard`, `SharedText`, etc.)
+- Design tokens for colors, spacing, typography, and shadows
+- Styleguide screen available in the Profile tab for reference!
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Database Schema
+
+```sql
+logs (
+  id uuid PK,
+  user_id uuid FK,
+  mood integer (1-10),
+  note text,
+  symptoms text[],
+  created_at timestamp
+)
+
+insights (
+  id uuid PK,
+  user_id uuid FK,
+  content text,
+  generated_at timestamp
+)
+```
+## Running locally
+
+```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Add your Supabase URL, anon key, and Anthropic API key
+
+# Run migrations
+npx drizzle-kit generate
+npx drizzle-kit migrate
+
+# Start the app
+npx expo start
+```
+
