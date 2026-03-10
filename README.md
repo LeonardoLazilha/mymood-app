@@ -10,6 +10,9 @@ I'm Leonardo Lazilha, software developer from Brazil. I pick up new technologies
 I work daily with Java, Angular, SQL Server and React Native in my current role, and spend my weekends building side projects with React, Node.js, TypeScript, Supabase, and Next.js. I love learning by doing, which is exactly why I built MyMood before even having a first conversation with the Topflight team.
 I'm excited about the possibility of joining Topflight because I genuinely enjoy building products that solve real problems. I'm comfortable working across the stack, adapting to new codebases quickly, and collaborating with teams remotely. I'm not looking for a comfortable job — I'm looking for a place where I can grow fast, contribute meaningfully, and help ship great products for your clients.
 
+- 🌐 [leonardolazilha.dev](https://www.leonardolazilha.dev)
+- 💼 [LinkedIn](https://www.linkedin.com/in/leonardo-lazilha-a52b7223a/)
+
 ---
 
 ## Why I built this
@@ -17,6 +20,16 @@ I'm excited about the possibility of joining Topflight because I genuinely enjoy
 I applied for a position at Topflight Apps and wanted to show — not just tell — that I can work with your stack. So instead of just listing technologies on a resume, I built something real with them.
 
 ---
+
+## Screenshots
+
+<p float="left">
+  <img src="assets/screenshots/home.png" width="200" />
+  <img src="assets/screenshots/log.png" width="200" />
+  <img src="assets/screenshots/history.png" width="200" />
+  <img src="assets/screenshots/insights.png" width="200" />
+  <img src="assets/screenshots/design.png" width="200" />
+</p>
 
 ## What it does
 
